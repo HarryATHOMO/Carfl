@@ -23,11 +23,12 @@ set(PRJ_INCLUDES
 )
 
 set(PJR_SOURCES
-        src/Main.cpp
-	src/Errors.cpp
-	src/Sockets.cpp
-	src/TCP/Client.cpp
-	src/TCP/Server.cpp
+    src/main.cpp
+	src/Network/Errors.cpp
+	src/Network/Socket.cpp
+	src/Network/ClientSocket.cpp
+	src/Network/ServerSocket.cpp
+	src/Network/Secu.cpp
 	#src/Version.cpp
 	#src/server/Server.cpp
 	#src/server/ServiceServer.cpp
@@ -59,6 +60,6 @@ add_executable(${PROJECTNAME} ${PJR_SOURCES})
 #target_link_libraries(${PROJECTNAME} ${LD_FLAGS} )
 #target_link_libraries(${PROJECTNAME} -lcpprest -lboost_system -ldl -lm bcrypt ${YIP_GTEST_LIB} sqlite3 exceptions utils logger)
 
-target_link_libraries(${PROJECTNAME} -lpthread)
+target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs)
 
 
