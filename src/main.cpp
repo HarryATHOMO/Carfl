@@ -3,10 +3,12 @@
 #include <cstring>
 #include <thread>
 #include <atomic>
-#include "Network/ServerSocket.h"
-#include "Network/Errors.h"
-#include "Network/Socket.h"
-#include "Network/Secu.h"
+#include <Common/Network/ServerSocket.h>
+#include <Common/Network/Socket.h>
+#include <Common/Network/Errors.h>
+#include <Common/Logger/Logger.h>
+
+
 
 using namespace std;
 
@@ -53,11 +55,32 @@ static int sigs_setup()
     return 0;
 }
 
+void parseArgument(int argc, char** argv)
+{
+    (void)(argc);
+    (void)(argv);
+}
 
-using namespace Network;
-int main()
+using namespace Common;
+int main(int argc, char** argv)
 {
     sigs_setup();
+
+
+    std::string configurationFile = "configuration.json";
+    if (argc >= 2)
+    {
+        configurationFile = argv[1];
+    }
+
+    Logger::Logger logger("Log.txt");
+    //Logger 
+    logger.run();
+
+
+    parseArgument(argc, argv);
+
+    
     std::thread th;
     std::shared_ptr<Network::IServerSocket> server = std::shared_ptr<Network::IServerSocket>(new Network::ServerSocket());
     std::atomic<bool> quit {false};
@@ -102,7 +125,7 @@ int main()
 
             if (sig_ctxt.triggered) {
 
-                std::cout << "Caught signal " << sig_ctxt.signum << std::endl;
+                LOG_INFO("Caught Signal %d", sig_ctxt.signum);
 
                 switch (sig_ctxt.signum) {
                 case SIGALRM:
@@ -122,6 +145,10 @@ int main()
                 break;
             }
     }
+
+    logger.requestStop();
+
+    LOG_INFO("Caught Signal %d", sig_ctxt.signum);
 
     quit.store(true);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
