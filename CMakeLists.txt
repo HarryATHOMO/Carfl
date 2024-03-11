@@ -11,7 +11,7 @@ INCLUDE(CheckCXXCompilerFlag)
 
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -Werror")
 
 set(PRJ_INCLUDES 
    	#${INCLUDES}
@@ -47,9 +47,11 @@ set(PJR_SOURCES
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Exceptions)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Utils)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Network)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Package)
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Configuration)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Logger)
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Comp)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Component)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Database)
 
 
 include_directories(${PRJ_INCLUDES} )
@@ -59,6 +61,4 @@ add_executable(${PROJECTNAME} ${PJR_SOURCES})
 #target_link_libraries(${PROJECTNAME} ${LD_FLAGS} )
 #target_link_libraries(${PROJECTNAME} -lcpprest -lboost_system -ldl -lm bcrypt ${YIP_GTEST_LIB} sqlite3 exceptions utils logger)
 
-target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs logger utils exceptions network)
-
-
+target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs -ljsoncpp logger comp packageComponent db pqxx pq  utils exceptions network)

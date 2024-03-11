@@ -1,0 +1,34 @@
+{
+    "Component" :
+    {
+        "TlsServer" : 
+        {
+            "class" : "Common::Network::ServerSocket",
+            "isConfigurable" : true
+        }
+    },
+    "Dependences" :
+    {
+        
+    },
+    "Configuration" :
+    {
+        "Logger":
+        {
+            "loggerRelativeFilePath" : "../LOG",
+            "logLevelFilter" : ["ALL"]
+        },
+        "TlsServer" :
+        {
+            "port" : 8080,
+            "scalabilite" : 3,
+            "withTLS" : true,
+            "type" : "rest",
+            "tls" : 
+            {
+                "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
+                "serverkey" : "/home/adris/CarflowServer/Ca/CaKey.pem"
+            }
+        }
+    }
+}
