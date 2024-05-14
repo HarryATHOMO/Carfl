@@ -7,6 +7,7 @@
 #include <Common/Logger/Logger.h>
 #include <Common/Component/IComponentManager.h>
 #include <Common/Component/ComponentManager.h>
+#include "RestHandlerPackage.h"
 
 
 
@@ -79,6 +80,7 @@ int main(int argc, char** argv)
     try
     {
         compMngr->addLocalRegistry();
+        compMngr->setLocalApiRestHandlerPackage(new CarflowServer::RestHandlerPackage());
         compMngr->loadConfigurationFromFile(configurationFile);
         compMngr->run();
     }

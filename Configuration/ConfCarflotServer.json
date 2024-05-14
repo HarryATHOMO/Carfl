@@ -1,15 +1,41 @@
 {
     "Component" :
     {
-        "TlsServer" : 
+        "restServer" : 
         {
-            "class" : "Common::Network::ServerSocket",
+            "class" : "Common::Network::RestApi::Server",
             "isConfigurable" : true
-        }
+        },
+        "influxDB" : 
+        {
+            "class" : "Common::Database::DBInflux",
+            "isConfigurable" : true
+        },
+        "posgreSQL" : 
+        {
+            "class" : "Common::Database::PostgreSQL",
+            "isConfigurable" : true
+        }        
     },
     "Dependences" :
     {
-        
+        "restServer":
+        {
+            "dependence":
+            [
+                {
+                    "name" : "InfluxDb",
+                    "provider" : "influxDB"
+                }
+            ],
+            "multi-dependences":
+            [
+                {
+                    "name" : "PostgreSQL",
+                    "providers" : ["posgreSQL"]
+                }
+            ]
+        }
     },
     "Configuration" :
     {
@@ -18,16 +44,48 @@
             "loggerRelativeFilePath" : "../LOG",
             "logLevelFilter" : ["ALL"]
         },
-        "TlsServer" :
+        "restServer" :
         {
             "port" : 8080,
             "scalabilite" : 3,
-            "withTLS" : true,
-            "type" : "rest",
+            "ReadRequestFrom" : "ALL",
+            "withTLS" : false,
+            "tls" : 
+            {
+                "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
+                "serverkey" : "/home/adris/CarflowServer/Ca/CaKey.pem",
+                "caCert" : ""
+            }
+        },
+        "influxDB" :
+        {
+            "port" : 8086,
+            "batch" : 500,
+            "url" : "localhost",
+            "dbName" : "carflowDB",
+            "username" : "",
+            "password" : "",
+            "protocole" : "HTTP",
+            "withTLS" : false,
             "tls" : 
             {
                 "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
                 "serverkey" : "/home/adris/CarflowServer/Ca/CaKey.pem"
+            }
+        },
+        "posgreSQL" :
+        {
+            "port" : 5432,
+            "dbName" : "postgres",
+            "url" : "localhost",
+            "username" : "postgres",
+            "password" : "12345",
+            "withTLS" : false,
+            "tls" : 
+            {
+                "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
+                "serverKey" : "/home/adris/CarflowServer/Ca/CaKey.pem",
+                "caCert" : ""
             }
         }
     }
