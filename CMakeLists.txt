@@ -15,6 +15,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -Werror")
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake/pc_linux-toolchain.cmake)
 
+include_directories( ${INCLUDES})
+
 set(PRJ_INCLUDES 
    	#${INCLUDES}
 	${CMAKE_SOURCE_DIR}
@@ -60,12 +62,11 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Component)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Common/Database)
 
 
-
-include_directories(${PRJ_INCLUDES} ${INCLUDES})
+include_directories(${PRJ_INCLUDES} )
 
 #link_directories(${LINK_DIRECTORIES} ${LD_DIRS} ${CMAKE_INSTALL_PREFIX}/usr/lib ${CMAKE_INSTALL_DIR}/usr/lib ${CMAKE_INSTALL_PREFIX}/usr/lib64 ${CMAKE_CURRENT_SOURCE_DIR}/tools/usr/local/lib)
 add_executable(${PROJECTNAME} ${PJR_SOURCES})
 #target_link_libraries(${PROJECTNAME} ${LD_FLAGS} )
 #target_link_libraries(${PROJECTNAME} -lcpprest -lboost_system -ldl -lm bcrypt ${YIP_GTEST_LIB} sqlite3 exceptions utils logger)
 
-target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs -ljsoncpp  logger comp packageComponent db pqxx pq  utils exceptions network -lInfluxDB)
+target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs -ljsoncpp -lcpr  logger comp packageComponent db pqxx pq  utils exceptions network -lInfluxDB)

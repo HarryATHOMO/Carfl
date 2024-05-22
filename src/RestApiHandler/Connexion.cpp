@@ -1,6 +1,7 @@
 #include <RestApiHandler/Connexion.h>
 #include <Common/Utils/Utils.h>
 #include <Common/Network/RestApi/Server.h>
+#include <Common/Database/IPostgreSQL.h>
 
 namespace CarflowServer
 {
@@ -13,9 +14,9 @@ HttpResponse Connexion::process(HttpRequest* req)
     const Json::Value requestBody = req->getBody();
 
 
-    //auto influx = server_->getInfluxDb();
-    //auto psql = getPSQL();
-    /*std::string email;
+    auto influx = server_->getInfluxDb();
+    auto psql_= getPSQL();
+    std::string email;
     std::string password;
 
     if (str::isValidEmail(email))
@@ -23,7 +24,7 @@ HttpResponse Connexion::process(HttpRequest* req)
 
     }
 
-    if (psql_ != nullptr)
+    if (psql_!= nullptr)
     {
         std::stringstream ss;
         ss << "SELECT * FROM getUser(";
@@ -31,22 +32,22 @@ HttpResponse Connexion::process(HttpRequest* req)
 
         std::string query = ss.str();
         auto res = psql_->processQuery(query);
-    }*/
+    }
 
     HttpResponse resp(ResponseErrorCode::Bad_Request);
 
     return resp;
 
-    /*std::string username = requestBody["username"].asString();
+    std::string username = requestBody["username"].asString();
     std::string password = requestBody["password"].asString();
 
-    // Vérification si ils ne sont pas vides
+    //Vérification si ils ne sont pas vides
     if (username.empty() || email.empty() || password.empty()) {
 
         return Common::Network::HttpResponse(Common::Network::ResponseErrorCode::Bad_Request);
     }
 
-    // Connexion à la base de données PostgreSQL
+    //Connexion à la base de données PostgreSQL
     PGconn* conn = PQconnectdb("host=192.168.0.19 dbname=db_test2 user=postgres ");
     if (!conn || PQstatus(conn) != CONNECTION_OK) {
         return Common::Network::HttpResponse(Common::Network::ResponseErrorCode::Bad_Request);
@@ -63,7 +64,7 @@ HttpResponse Connexion::process(HttpRequest* req)
         return Common::Network::HttpResponse(Common::Network::ResponseErrorCode::Bad_Request);
     }
     PQclear(res);
-    PQfinish(conn);*/
+    PQfinish(conn);
 } 
 
 }
