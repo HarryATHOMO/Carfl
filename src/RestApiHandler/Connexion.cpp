@@ -13,13 +13,25 @@ HttpResponse Connexion::process(HttpRequest* req)
 {
     const Json::Value requestBody = req->getBody();
 
+    std::string email = requestBody["email"].asString();
+    std::string password = requestBody["password"].asString();
 
-    auto influx = server_->getInfluxDb();
-    auto psql_= getPSQL();
-    std::string email;
-    std::string password;
+    bool ret =      (not email.empty() and str::isValidEmail(email))
+                and (not password.empty() and str::isValidPassword(password));
 
-    if (str::isValidEmail(email))
+    if (not ret)
+    {
+        return HttpResponse(ResponseErrorCode::Bad_Request);
+    }
+
+    return HttpResponse(ResponseErrorCode::Bad_Request);
+
+    //auto influx = server_->getInfluxDb();
+    //auto psql_= getPSQL();
+    
+
+    
+    /*if (str::isValidEmail(email))
     {
 
     }
@@ -34,7 +46,7 @@ HttpResponse Connexion::process(HttpRequest* req)
         auto res = psql_->processQuery(query);
     }
 
-    HttpResponse resp(ResponseErrorCode::Bad_Request);
+    
 
     return resp;
 
@@ -64,7 +76,7 @@ HttpResponse Connexion::process(HttpRequest* req)
         return Common::Network::HttpResponse(Common::Network::ResponseErrorCode::Bad_Request);
     }
     PQclear(res);
-    PQfinish(conn);
+    PQfinish(conn);*/
 } 
 
 }

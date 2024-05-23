@@ -33,13 +33,14 @@ HttpResponse Inscription::process(HttpRequest* req)
     std::string query = "SELECT * FROM Inscription('" + nom + "','" + prenom + "','" + phone + "', '" + email + "','" + password + "');";
     auto res = psql_->processQuery(query);
 
-    if (res.columns() > 0)
+    if (res.columns() == 0 or not std::get<0>(res[0].as<bool>()))
     {
-        if (res[0].as<int>())
-            return HttpResponse(ResponseCode::OK,"");
-        else 
-            return HttpResponse(ResponseErrorCode::Forbidden);
+        return HttpResponse(ResponseErrorCode::Forbidden);
     }
+
+    return HttpResponse(ResponseCode::OK,"");
+
+    
 }
 }
 
