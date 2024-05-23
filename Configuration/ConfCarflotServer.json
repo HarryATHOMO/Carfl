@@ -76,7 +76,7 @@
         "posgreSQL" :
         {
             "port" : 5432,
-            "dbName" : "postgres",
+            "dbName" : "carflowDB",
             "url" : "localhost",
             "username" : "postgres",
             "password" : "12345",

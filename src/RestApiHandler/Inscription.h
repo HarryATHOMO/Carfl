@@ -9,6 +9,7 @@ namespace RestApiHandler
 class Inscription : public Common::Network::RestApi::IHandler
 {
 public:
+    virtual ~Inscription() {}
     Common::Network::HttpResponse process(Common::Network::HttpRequest*) final override;
 };
 }
