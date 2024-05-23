@@ -10,7 +10,8 @@ namespace RestApiHandler
 using namespace Common::Network;
 using namespace Common::Utils;
 HttpResponse Connexion::process(HttpRequest* req)
-{
+{ //pourquoi ici on vérifie pas si la base de donnée est vide ou pas comme dans l'inscription ?//
+
     const Json::Value requestBody = req->getBody();
 
     std::string email = requestBody["email"].asString();

@@ -1,0 +1,55 @@
+[0;32m2024-05-21 18:26:55.475 ComponentManager.cpp loadConfigurationFromFile 248 INFO  JSON file path used is [../Configuration/ConfCarflotServer.json][0m
+[0;32m2024-05-21 18:26:55.496 ComponentManager.cpp loadConfigurationFromFile 615 INFO  ***** LOADING CONF *****[0m
+[0;32m2024-05-21 18:26:55.498 ComponentManager.cpp loadConfigurationFromFile 627 INFO  Create component 'influxDB' of type 'Common::Database::DBInflux'[0m
+[0;34m2024-05-21 18:26:55.498 ComponentManager.cpp createComponent 1024 DEBUG  Creating component 'influxDB' of class 'Common::Database::DBInflux'[0m
+[0;34m2024-05-21 18:26:55.498 ComponentManager.cpp createComponent 1054 DEBUG  Component 'influxDB' created.[0m
+[0;32m2024-05-21 18:26:55.498 ComponentManager.cpp loadConfigurationFromFile 627 INFO  Create component 'posgreSQL' of type 'Common::Database::PostgreSQL'[0m
+[0;34m2024-05-21 18:26:55.499 ComponentManager.cpp createComponent 1024 DEBUG  Creating component 'posgreSQL' of class 'Common::Database::PostgreSQL'[0m
+[0;34m2024-05-21 18:26:55.499 ComponentManager.cpp createComponent 1054 DEBUG  Component 'posgreSQL' created.[0m
+[0;32m2024-05-21 18:26:55.499 ComponentManager.cpp loadConfigurationFromFile 627 INFO  Create component 'restServer' of type 'Common::Network::RestApi::Server'[0m
+[0;34m2024-05-21 18:26:55.500 ComponentManager.cpp createComponent 1024 DEBUG  Creating component 'restServer' of class 'Common::Network::RestApi::Server'[0m
+[0;34m2024-05-21 18:26:55.500 ComponentManager.cpp createComponent 1054 DEBUG  Component 'restServer' created.[0m
+[0;32m2024-05-21 18:26:55.501 ComponentManager.cpp loadConfigurationFromFile 649 INFO  Begin component configuration...[0m
+[0;32m2024-05-21 18:26:55.501 ComponentManager.cpp loadConfigurationFromFile 659 INFO  Configure component 'influxDB'[0m
+[0;32m2024-05-21 18:26:55.501 ComponentManager.cpp loadConfigurationFromFile 659 INFO  Configure component 'posgreSQL'[0m
+[0;32m2024-05-21 18:26:55.501 ComponentManager.cpp loadConfigurationFromFile 659 INFO  Configure component 'restServer'[0m
+[0;32m2024-05-21 18:26:55.501 ComponentManager.cpp loadConfigurationFromFile 800 INFO  ***** CONF LOADED *****[0m
+[0;32m2024-05-21 18:26:55.501 ComponentManager.cpp loadConfigurationFromFile 806 INFO  ***** ALL COMPONENTS READY *****[0m
+[0;31m2024-05-21 18:26:55.971 DBInflux.cpp onAllComponentsReadyAfter 192 ERROR  Request error: (1) Failed to connect to localhost port 8086 after 3 ms: Couldn't connect to server[0m
+[0;32m2024-05-21 18:26:55.971 Server.cpp onAllComponentsReadyAfter 81 INFO  Serveur Component started with tls 0[0m
+[0;31m2024-05-21 18:26:56.001 PostgreSQL.cpp onAllComponentsReadyAfter 149 ERROR  connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+[0m
+[0;31m2024-05-21 18:26:56.002 PostgreSQL.cpp onAllComponentsReadyAfter 149 ERROR  connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+[0m
+[0;31m2024-05-21 18:26:56.006 DBInflux.cpp onAllComponentsReadyAfter 192 ERROR  Request error: (1) Failed to connect to localhost port 8086 after 2 ms: Couldn't connect to server[0m
+[0;31m2024-05-21 18:26:56.006 ComponentManager.cpp applyToAllComponents 71 ERROR  Component posgreSQL still not initialized[0m
+[0;31m2024-05-21 18:26:56.008 PostgreSQL.cpp onAllComponentsReadyAfter 149 ERROR  connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+[0m
+[0;31m2024-05-21 18:26:56.008 ComponentManager.cpp applyToAllComponents 71 ERROR  Component influxDB still not initialized[0m
+[0;31m2024-05-21 18:26:56.011 DBInflux.cpp onAllComponentsReadyAfter 192 ERROR  Request error: (1) Failed to connect to localhost port 8086 after 1 ms: Couldn't connect to server[0m
+[0;32m2024-05-21 18:26:56.103 main.cpp main 101 INFO  Caught Signal 2[0m
+[0;33m2024-05-21 18:26:56.105 ComponentManager.cpp stop 1428 WARN  loop interrupted[0m
+[0;32m2024-05-21 18:26:56.105 ComponentManager.cpp stop 1430 INFO  ***** LOOP FINISHING *****[0m
+[0;32m2024-05-21 18:26:56.105 DBInflux.cpp onLeavingLoopBefore 207 INFO  On leaving loop before start[0m
+[0;32m2024-05-21 18:26:56.105 DBInflux.cpp onLeavingLoopBefore 211 INFO  On leaving loop before finish[0m
+[0;32m2024-05-21 18:26:56.105 PostgreSQL.cpp onLeavingLoopBefore 159 INFO  On leaving loop before start[0m
+[0;32m2024-05-21 18:26:56.105 PostgreSQL.cpp onLeavingLoopBefore 168 INFO  On leaving loop before finish[0m
+[0;32m2024-05-21 18:26:56.105 Server.cpp onLeavingLoopBefore 108 INFO restServer STOP LOOP STARTING[0m
+[0;32m2024-05-21 18:26:56.105 Server.cpp onLeavingLoopBefore 129 INFO restServer STOP LOOP FINISHED[0m
+[0;33m2024-05-21 18:26:56.105 ComponentManager.cpp stop 1433 WARN  Main loop exiting.[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp ~ComponentManager 171 DEBUG  Deleting ComponentManager...[0m
+[0;32m2024-05-21 18:26:56.309 ComponentManager.cpp ~ComponentManager 189 INFO  Deleting component influxDB[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp deleteComponent 1066 DEBUG  Deleting component 'influxDB'...[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp deleteComponent 1190 DEBUG  Component 'influxDB' deleted[0m
+[0;32m2024-05-21 18:26:56.309 ComponentManager.cpp ~ComponentManager 189 INFO  Deleting component posgreSQL[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp deleteComponent 1066 DEBUG  Deleting component 'posgreSQL'...[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp deleteComponent 1190 DEBUG  Component 'posgreSQL' deleted[0m
+[0;32m2024-05-21 18:26:56.309 ComponentManager.cpp ~ComponentManager 189 INFO  Deleting component restServer[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp deleteComponent 1066 DEBUG  Deleting component 'restServer'...[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp deleteComponent 1190 DEBUG  Component 'restServer' deleted[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp ~ComponentManager 197 DEBUG  All component deleted.[0m
+[0;34m2024-05-21 18:26:56.309 ComponentManager.cpp ~ComponentManager 198 DEBUG  Deleting ComponentManager : destructor done..[0m
+[0;32m2024-05-21 18:26:56.313 ***************** END *****************[0m
