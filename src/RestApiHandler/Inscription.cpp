@@ -10,8 +10,9 @@ using namespace Common::Network;
 
 HttpResponse Inscription::process(HttpRequest* req)
 {
+    //accés a la base de donnée dans la variable psql
     auto psql_= getPSQL();
-    if (psql_!= nullptr)
+    if (psql_== nullptr)
     {
         return HttpResponse(ResponseErrorCode::Forbidden, "service non disponible essayer ");
     }
@@ -30,7 +31,7 @@ HttpResponse Inscription::process(HttpRequest* req)
     if (not ret)
         return HttpResponse(ResponseErrorCode::Bad_Request);
    
-    std::string query = "SELECT * FROM Inscription('" + nom + "','" + prenom + "','" + phone + "', '" + email + "','" + password + "');";
+    std::string query = "SELECT * FROM Inscription('" + email + "','" + password + "');";
     auto res = psql_->processQuery(query);
 
     if (res.columns() == 0 or not std::get<0>(res[0].as<bool>()))

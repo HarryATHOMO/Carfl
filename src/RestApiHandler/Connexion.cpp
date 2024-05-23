@@ -10,13 +10,20 @@ namespace RestApiHandler
 using namespace Common::Network;
 using namespace Common::Utils;
 HttpResponse Connexion::process(HttpRequest* req)
-{ //pourquoi ici on vérifie pas si la base de donnée est vide ou pas comme dans l'inscription ?//
+{ 
+    //verification que la base de donnée existe
+    auto psql_= getPSQL();
+    if (psql_== nullptr)
+    {
+        return HttpResponse(ResponseErrorCode::Forbidden, "service non disponible essayer ");
+    }
 
     const Json::Value requestBody = req->getBody();
 
     std::string email = requestBody["email"].asString();
     std::string password = requestBody["password"].asString();
 
+//verification des entrées 
     bool ret =      (not email.empty() and str::isValidEmail(email))
                 and (not password.empty() and str::isValidPassword(password));
 
@@ -25,7 +32,73 @@ HttpResponse Connexion::process(HttpRequest* req)
         return HttpResponse(ResponseErrorCode::Bad_Request);
     }
 
-    return HttpResponse(ResponseErrorCode::Bad_Request);
+//appel de la procédure stockée
+    std::string query = "SELECT * FROM conion('" + email + "','" + password + "');";
+    auto res = psql_->processQuery(query);
+
+    if (res.columns() == 0 or not std::get<0>(res[0].as<bool>()))
+    {
+        return HttpResponse(ResponseErrorCode::Forbidden);
+    }
+
+    return HttpResponse(ResponseCode::OK,"");
+
+// cette partie je savais pas ou la définir du coup je l'ai mise ici j'ai hésité entre la mettre dans utils.cpp car de base c'est laba qu'on a fiat les implémentation des fonctions hier  
+    bool authenUser(const std::string& email, const std::string& password)
+    {
+            try
+        {
+            // Établir une connexion à la base de données PostgreSQL
+             pqxx::connection conn("dbname=db_test2 user=postgres host=192.168.0.19 port=5432");
+
+            // Préparer la requête SQL
+            pqxx::work txn(conn);
+            pqxx::result result = txn.exec(
+            "SELECT COUNT(*) FROM users WHERE email = $1 AND password = $2",
+            email, password);
+
+            // Récupérer le résultat de la requête
+            int rowCount = result[0][0].as<int>();
+
+    
+            if (rowCount > 0)
+            {
+        // authentification ok
+                    return true; 
+            }
+            else
+            {
+            // authentification bad
+                    return false; 
+            }
+        }
+               /*** catch (const std::exception& e)
+                {
+                     // les erreurs de connexion 
+                     std::cerr << "Erreur : " << e.what() << std::endl;
+                         return false;
+                 }*/
+    }
+              
+
+    // Vérification des données dans la base
+    bool InfosValid = authenUser(email, password); 
+
+    if (InfosValid)
+    {
+        return HttpResponse(ResponseCode::OK, "Authentification réussie.");
+    }
+
+    else
+    {
+        
+        return HttpResponse(ResponseErrorCode::Forbidden, "Identifiants invalides.");
+    }
+       
+
+    
+
+        return HttpResponse(ResponseErrorCode::Bad_Request);
 
     //auto influx = server_->getInfluxDb();
     //auto psql_= getPSQL();
