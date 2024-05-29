@@ -15,7 +15,12 @@
         {
             "class" : "Common::Database::PostgreSQL",
             "isConfigurable" : true
-        }        
+        },
+        "emailManager" :
+        {
+            "class" : "Common::Network::Email::EmailManager",
+            "isConfigurable" : true
+        }
     },
     "Dependences" :
     {
@@ -26,6 +31,10 @@
                 {
                     "name" : "InfluxDb",
                     "provider" : "influxDB"
+                },
+                {
+                    "name" : "",
+                    "provider" : ""
                 }
             ],
             "multi-dependences":
@@ -87,6 +96,13 @@
                 "serverKey" : "/home/adris/CarflowServer/Ca/CaKey.pem",
                 "caCert" : ""
             }
+        },
+        "emailManager" :
+        {
+            "smtp" : "smtps://smtp.gmail.com:465",
+            "login" : "mouanda91@gmail.com",
+            "password" : "",
+            "sender" : "mouanda91@gmail.com"
         }
     }
 }

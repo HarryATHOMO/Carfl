@@ -31,8 +31,10 @@ set(PRJ_INCLUDES
 set(PJR_SOURCES
     src/main.cpp
 	src/RestHandlerPackage.cpp
+	src/RestApiHandler/CodeAuthenticate.cpp
 	src/RestApiHandler/Connexion.cpp
 	src/RestApiHandler/Inscription.cpp
+	src/RestApiHandler/VerificationCompte.cpp
 	#src/Version.cpp
 	#src/server/Server.cpp
 	#src/server/ServiceServer.cpp
@@ -69,4 +71,4 @@ add_executable(${PROJECTNAME} ${PJR_SOURCES})
 #target_link_libraries(${PROJECTNAME} ${LD_FLAGS} )
 #target_link_libraries(${PROJECTNAME} -lcpprest -lboost_system -ldl -lm bcrypt ${YIP_GTEST_LIB} sqlite3 exceptions utils logger)
 
-target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs -ljsoncpp -lcpr  logger comp packageComponent db pqxx pq  utils exceptions network -lInfluxDB)
+target_link_libraries(${PROJECTNAME} -lpthread -lssl -lcrypto -lstdc++fs -ljsoncpp -lcpr logger comp packageComponent db pqxx pq  utils exceptions network -lInfluxDB -lcurl)

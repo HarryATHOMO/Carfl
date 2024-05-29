@@ -1,6 +1,7 @@
 #include <RestApiHandler/Inscription.h>
 #include<Common/Utils/Utils.h>
 #include <Common/Utils/Token.h>
+#include <Common/Network/RestApi/Server.h>
 
 namespace CarflowServer
 {
@@ -46,19 +47,39 @@ HttpResponse Inscription::process(HttpRequest* req)
         contact = "email";
     }
 
-    std::string query = "SELECT * FROM Inscription(" + username + "," + std::to_string(sexe) + ", '" + nom + "','" + prenom + "','" + phone + "', '" + email + "','" + password + "', ,'" + naissance + "', ,'" + contact + "');";
+    std::string query = "SELECT * FROM Inscription('" + username + "'," + std::to_string(sexe) + ", '" + nom + "','" + prenom + "','" + phone + "', '" + email + "','" + password + "', ,'" + naissance + "', ,'" + contact + "');";
     auto res = psql_->processQuery(query);
 
-    if (res.columns() == 0 or not std::get<0>(res[0].as<bool>()))
+    if (res.size() == 0 or not res[0][0].as<bool>())
     {
         return HttpResponse(ResponseErrorCode::Forbidden);
     }
 
-    auto tok = Token::generateRandomToken(25);
+    std::string id = res[0][1].as<std::string>();
+    auto tok = Token::generateRandomToken(25); 
+    auto code = Token::generateCode(6);
 
-    return HttpResponse(ResponseCode::OK,"");
+    if (contact == "email")
+    {
+        auto emailMngr = server_->getEmailManager();
+        if (emailMngr != nullptr and str::isValidEmail(email))
+        {
+            emailMngr->sendEmail(email, "Confirmation de compte", "code : " + code, [&](uint res){
+                if (res)
+                {
+                    auto serv = dynamic_cast<RestApi::Server*>(server_);
 
+                    if (serv != nullptr)
+                    {
+                        uint64_t now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                        serv->addCodeValidate(tok, {now, code, id});
+                    }
+                }
+            });
+        }
+    }
     
+    return HttpResponse(ResponseCode::OK, "{\"token\" : \"" + tok + "\" }");
 }
 }
 
