@@ -1,0 +1,108 @@
+{
+    "Component" :
+    {
+        "restServer" : 
+        {
+            "class" : "Common::Network::RestApi::Server",
+            "isConfigurable" : true
+        },
+        "influxDB" : 
+        {
+            "class" : "Common::Database::DBInflux",
+            "isConfigurable" : true
+        },
+        "posgreSQL" : 
+        {
+            "class" : "Common::Database::PostgreSQL",
+            "isConfigurable" : true
+        },
+        "emailManager" :
+        {
+            "class" : "Common::Network::Email::EmailManager",
+            "isConfigurable" : true
+        }
+    },
+    "Dependences" :
+    {
+        "restServer":
+        {
+            "dependence":
+            [
+                {
+                    "name" : "InfluxDb",
+                    "provider" : "influxDB"
+                },
+                {
+                    "name" : "EmailManager",
+                    "provider" : "emailManager"
+                }
+            ],
+            "multi-dependences":
+            [
+                {
+                    "name" : "PostgreSQL",
+                    "providers" : ["posgreSQL"]
+                }
+            ]
+        }
+    },
+    "Configuration" :
+    {
+        "Logger":
+        {
+            "loggerRelativeFilePath" : "../LOG",
+            "logLevelFilter" : ["ALL"]
+        },
+        "restServer" :
+        {
+            "port" : 8080,
+            "scalabilite" : 3,
+            "ReadRequestFrom" : "ALL",
+            "withTLS" : false,
+            "tls" : 
+            {
+                "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
+                "serverkey" : "/home/adris/CarflowServer/Ca/CaKey.pem",
+                "caCert" : ""
+            }
+        },
+        "influxDB" :
+        {
+            "port" : 8086,
+            "batch" : 500,
+            "url" : "localhost",
+            "dbName" : "carflowDB",
+            "username" : "",
+            "password" : "",
+            "protocole" : "HTTP",
+            "withTLS" : false,
+            "tls" : 
+            {
+                "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
+                "serverkey" : "/home/adris/CarflowServer/Ca/CaKey.pem"
+            }
+        },
+        "posgreSQL" :
+        {
+            "port" : 5432,
+            "dbName" : "carflowDB",
+            "url" : "localhost",
+            "username" : "postgres",
+            "password" : "12345",
+            "withTLS" : false,
+            "tls" : 
+            {
+                "serverCert" : "/home/adris/CarflowServer/Ca/rootCACert.pem",
+                "serverKey" : "/home/adris/CarflowServer/Ca/CaKey.pem",
+                "caCert" : ""
+            }
+        },
+        "emailManager" :
+        {
+            "smtp" : "smtps://smtp.gmail.com:465",
+            "login" : "mouanda91@gmail.com",
+            "password" : "",
+            "sender" : "mouanda91@gmail.com"
+        }
+    }
+}

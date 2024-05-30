@@ -3,10 +3,13 @@
 #include <cstring>
 #include <thread>
 #include <atomic>
-#include "Network/ServerSocket.h"
-#include "Network/Errors.h"
-#include "Network/Socket.h"
-#include "Network/Secu.h"
+#include <filesystem>
+#include <Common/Logger/Logger.h>
+#include <Common/Component/IComponentManager.h>
+#include <Common/Component/ComponentManager.h>
+#include "RestHandlerPackage.h"
+
+
 
 using namespace std;
 
@@ -53,79 +56,84 @@ static int sigs_setup()
     return 0;
 }
 
+std::string configurationFile = "";
 
-using namespace Network;
-int main()
+void parseArgument(int argc, char** argv)
+{
+    if (argc >= 2)
+    {
+        configurationFile = argv[1];
+    }
+}
+
+using namespace Common::Comp;
+
+int main(int argc, char** argv)
 {
     sigs_setup();
-    std::thread th;
-    std::shared_ptr<Network::IServerSocket> server = std::shared_ptr<Network::IServerSocket>(new Network::ServerSocket());
-    std::atomic<bool> quit {false};
 
-    if (server->start(8080, true, true))
-    {        
-        th  = std::thread([&server, &quit]() {
-            while(!quit.load())
-            {
-                server->update();
-                while (auto msg = server->poll())
-                {
-                    if (msg->is<Network::Messages::Connection>())
-                    {
-                        std::cout << "Connexion de [" << Network::GetAddress(msg->from) << ":" << Network::GetPort(msg->from) << "]" << std::endl;
-                    }
-                    else if (msg->is<Network::Messages::Disconnection>())
-                    {
-                        std::cout << "Deconnexion de [" << Network::GetAddress(msg->from) << ":" << Network::GetPort(msg->from) << "]" << std::endl;
-                    }
-                    else if (msg->is<Network::Messages::UserData>())
-                    {
-                        std::cout << "receive message" << std::endl;
-                        auto userdata = msg->as<Network::Messages::UserData>();
-                        server->sendToAll(userdata->data.data(), static_cast<unsigned int>(userdata->data.size()));
-                    }
-                }
-            }
-            server->stop();
-        });
-    }
-    else
+    parseArgument(argc, argv);
+
+    Common::Logger::Logger*	logger = new Common::Logger::Logger();
+    IComponentManager* compMngr = new ComponentManager();
+
+    try
     {
-        std::cout << "Erreur initialisation serveur : " << Network::Errors::Get();
-        return -2;
+        compMngr->addLocalRegistry();
+        compMngr->setLocalApiRestHandlerPackage(new CarflowServer::RestHandlerPackage());
+        compMngr->loadConfigurationFromFile(configurationFile);
+        compMngr->run();
+    }
+    catch(boost::exception& e)
+    {
+        std::string info = boost::diagnostic_information(e);
+        std::cout << info << std::endl;
+        std::raise(SIGINT);
     }
 
     while (1) 
     {
 
-            //watchdog_activity_alive(main_wdg_cookie);
+        //watchdog_activity_alive(main_wdg_cookie);
 
-            if (sig_ctxt.triggered) {
+        if (sig_ctxt.triggered) {
 
-                std::cout << "Caught signal " << sig_ctxt.signum << std::endl;
+            LOG_INFO("Caught Signal %d", sig_ctxt.signum);
 
-                switch (sig_ctxt.signum) {
-                case SIGALRM:
-                    std::cout << "rebooting.." << std::endl;
-                    //sh_reboot(10, "Reboot due to SIGALRM signal", true);
-                    break;
+            switch (sig_ctxt.signum) {
+            case SIGALRM:
+                std::cout << "rebooting.." << std::endl;
+                //sh_reboot(10, "Reboot due to SIGALRM signal", true);
+                break;
 
-                case SIGINT:
-                case SIGTERM:
-                    std::cout << "stopping.." << std::endl;
-                    break;
-                case SIGPIPE:
-                    sig_ctxt.triggered = 0;
-                    continue;
-                    break;
-                }
+            case SIGINT:
+            case SIGSEGV:
+            case SIGTERM:
+                std::cout << "stopping.." << std::endl;
+                break;
+            case SIGPIPE:
+                sig_ctxt.triggered = 0;
+                continue;
                 break;
             }
+            break;
+        }
     }
 
+    compMngr->stop();
+
+    compMngr->saveConfigurationToFile("");
+
+    delete compMngr;
+
+    logger->requestStop();
+    delete logger;
+    /*
     quit.store(true);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     th.join();
+
+    config.exportConfiguration();*/
 
     return 0;
 }
