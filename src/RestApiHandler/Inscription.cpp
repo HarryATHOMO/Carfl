@@ -40,7 +40,7 @@ HttpResponse Inscription::process(HttpRequest* req)
                 and (contact.empty() or (contact == "phone" or contact == "email"))
                 and (sexe == 1 or sexe == 2);
     if (not ret)
-        return HttpResponse(ResponseErrorCode::Bad_Request, "Champs manquants ou mauvais format des données");
+        return HttpResponse(ResponseErrorCode::Bad_Request, InternalResponseCode::Missing_or_Wrong_Field);
    
     if (contact.empty())
     {
@@ -52,7 +52,7 @@ HttpResponse Inscription::process(HttpRequest* req)
 
     if (res.size() == 0 or not res[0][0].as<bool>())
     {
-        return HttpResponse(ResponseErrorCode::Forbidden);
+        return HttpResponse(ResponseErrorCode::Forbidden, InternalResponseCode::User_Already_Exist);
     }
 
     std::string id = res[0][1].as<std::string>();
